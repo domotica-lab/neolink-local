@@ -1,0 +1,72 @@
+name: Release
+# Creates the tag and GitHub release for a new version automatically.
+# The version is read from the integration's manifest.json; the add-on's
+# config.yaml must carry the same number. The release notes are that
+# version's section of neolink_local/CHANGELOG.md.
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - custom_components/neolink_local/manifest.json
+      - neolink_local/config.yaml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read versions
+        id: version
+        run: |
+          v=$(jq -r .version custom_components/neolink_local/manifest.json)
+          addon=$(sed -nE 's/^version:[[:space:]]*"?([^"]+)"?[[:space:]]*$/\1/p' neolink_local/config.yaml)
+          echo "Integration: $v, add-on: $addon"
+          if [ -z "$v" ] || [ "$v" = "null" ]; then
+            echo "::error::No version in manifest.json"; exit 1
+          fi
+          if [ "$v" != "$addon" ]; then
+            echo "::error::Version mismatch: manifest.json has $v, add-on config.yaml has $addon"; exit 1
+          fi
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+
+      - name: Skip if already released
+        id: exists
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "${{ steps.version.outputs.version }}" >/dev/null 2>&1; then
+            echo "Release ${{ steps.version.outputs.version }} already exists, nothing to do."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Release notes from the changelog
+        if: steps.exists.outputs.skip != 'true'
+        run: |
+          v="${{ steps.version.outputs.version }}"
+          awk -v v="$v" '
+            $0 == "## " v { found = 1; next }
+            found && /^## / { exit }
+            found { print }
+          ' neolink_local/CHANGELOG.md > notes.md
+          if ! grep -q '[^[:space:]]' notes.md; then
+            echo "Neolink Local $v." > notes.md
+          fi
+          cat notes.md
+
+      - name: Create tag and release
+        if: steps.exists.outputs.skip != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          v="${{ steps.version.outputs.version }}"
+          gh release create "$v" --title "$v" --notes-file notes.md --target "$GITHUB_SHA" --latest
