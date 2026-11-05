@@ -17,15 +17,22 @@ an unofficial fork of [Neolink](https://github.com/privatecoder/neolink).
 
 ## Install
 
-**Add-on:** Settings → Add-ons → Add-on store → ⋮ → Repositories → add
-`https://github.com/domotica-lab/neolink-local`, then install **Neolink Local**.
+**1. Add-on**
 
-**Integration:** HACS → ⋮ → Custom repositories → add
-`https://github.com/domotica-lab/neolink-local` as *Integration*, install
-**Neolink Local**, restart Home Assistant, then Settings → Devices & services →
-Add integration → **Neolink Local** (keep the suggested values).
-Without HACS, copy `custom_components/neolink_local` to
-`/config/custom_components/`.
+[![Add the add-on repository to Home Assistant](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fdomotica-lab%2Fneolink-local)
+
+Then install **Neolink Local** from the add-on store, configure your cameras and
+start it. (Manually: Settings → Add-ons → Add-on store → ⋮ → Repositories →
+`https://github.com/domotica-lab/neolink-local`.)
+
+**2. Integration**
+
+[![Open in HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=domotica-lab&repository=neolink-local&category=integration)
+
+Download **Neolink Local** in HACS, restart Home Assistant, then
+[![Add integration](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=neolink_local)
+and keep the suggested values. Without HACS, copy
+`custom_components/neolink_local` to `/config/custom_components/`.
 
 Full documentation (Italian) is in the add-on's **Documentation** tab and in
 [`neolink_local/DOCS.md`](neolink_local/DOCS.md).
@@ -46,9 +53,9 @@ Full documentation (Italian) is in the add-on's **Documentation** tab and in
 ## Italiano
 
 Telecamere Reolink, anche a batteria, in Home Assistant senza cloud.
-Installazione: aggiungi `https://github.com/domotica-lab/neolink-local` come
-repository degli add-on (e come repository personalizzato HACS per
-l'integrazione). La guida completa è nella scheda **Documentazione**
+Installazione: usa i pulsanti qui sopra (add-on, poi integrazione da HACS),
+oppure aggiungi `https://github.com/domotica-lab/neolink-local` come
+repository degli add-on e come repository personalizzato HACS. La guida completa è nella scheda **Documentazione**
 dell'add-on.
 
 ## License and credits
