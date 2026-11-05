@@ -1,0 +1,1 @@
+{"log_level":"info","bind":"0.0.0.0","bind_port":8558,"offline_timeout_secs":0,"api_port":8600,"api_bind":"0.0.0.0","rtsp_users":[],"mqtt_resolved":{"enabled":false},"cameras":[{"name":"Cam","username":"admin","password":"pw","uid":"UID1"}]}

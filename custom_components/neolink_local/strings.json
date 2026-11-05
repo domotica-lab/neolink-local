@@ -1,0 +1,65 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Neolink Local",
+        "description": "Connects to the Neolink Local add-on. If the add-on runs on this Home Assistant, keep the suggested values.",
+        "data": {
+          "host": "Add-on address",
+          "api_port": "Status API port",
+          "rtsp_host": "RTSP address (optional)",
+          "username": "RTSP user (optional)",
+          "password": "RTSP password (optional)"
+        },
+        "data_description": {
+          "host": "127.0.0.1 when the add-on runs on this Home Assistant.",
+          "api_port": "The add-on's api_port option (default 8559).",
+          "rtsp_host": "Leave empty to use the add-on address.",
+          "username": "Only if you set RTSP users in the add-on.",
+          "password": "Password of that RTSP user."
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Cannot reach the add-on. Check that Neolink Local is running and the port is correct."
+    },
+    "abort": {
+      "already_configured": "This add-on is already configured."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Video stream",
+        "description": "Which stream the camera entities play. The sub stream is lighter and suits dashboards.",
+        "data": {
+          "stream": "Stream"
+        }
+      }
+    }
+  },
+  "selector": {
+    "stream": {
+      "options": {
+        "main": "Main (high quality)",
+        "sub": "Sub (light)",
+        "extern": "Extern (balanced)"
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "connected": {
+        "name": "Connected"
+      }
+    },
+    "sensor": {
+      "viewers": {
+        "name": "Viewers"
+      },
+      "last_image": {
+        "name": "Last image"
+      }
+    }
+  }
+}

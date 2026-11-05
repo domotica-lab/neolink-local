@@ -1,0 +1,12 @@
+bind = "0.0.0.0"
+bind_port = 8558
+offline_timeout_secs = 0
+api_bind = "0.0.0.0"
+api_port = 8600
+
+[[cameras]]
+name = "Cam"
+username = "admin"
+password = "pw"
+uid = "UID1"
+channel_id = 0

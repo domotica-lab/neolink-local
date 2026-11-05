@@ -1,0 +1,252 @@
+configuration:
+  log_level:
+    name: Livello di log
+    description: >-
+      Quanto è dettagliato il registro dell'add-on. "info" è consigliato;
+      usa "debug" solo per diagnosticare un problema (scrive molte righe al secondo).
+  bind:
+    name: Indirizzo di ascolto
+    description: >-
+      Interfaccia di rete su cui il server RTSP accetta connessioni.
+      0.0.0.0 = tutte le interfacce (consigliato).
+  bind_port:
+    name: Porta RTSP
+    description: >-
+      Porta del server RTSP (predefinita 8558). Non usare 8554: è già occupata
+      da go2rtc integrato in Home Assistant. Gli stream sono su
+      rtsp://<IP-di-Home-Assistant>:8558/<nome-camera>/main
+  offline_timeout_secs:
+    name: Timeout camera offline (secondi)
+    description: >-
+      Valore globale. Per quanto tempo chi guarda vede l'immagine segnaposto
+      mentre una camera è irraggiungibile, prima che lo stream venga chiuso
+      (così Home Assistant può segnare la camera come non disponibile).
+      0 = mai: il segnaposto resta finché la camera torna. Valori da 1 a 59
+      vengono portati a 60. Si può cambiare per singola camera.
+  startup_keyframe_wait_secs:
+    name: Attesa primo fotogramma (secondi)
+    description: >-
+      Valore globale. Quando apri una camera addormentata, neolink aspetta fino
+      a questi secondi il primo fotogramma vero prima di rispondere al player,
+      invece di mostrare subito il segnaposto. 2 è un buon valore con go2rtc;
+      0 = nessuna attesa.
+  stream_cache_path:
+    name: File della cache degli stream
+    description: >-
+      Dove salvare i formati video/audio imparati da ogni camera, così dopo un
+      riavvio lo stream si prepara subito anche se la camera dorme. Lascia il
+      valore predefinito (/data/stream-cache.json); svuota il campo per non
+      salvare nulla su disco.
+  api_port:
+    name: Porta API di stato
+    description: >-
+      Porta dell'interfaccia locale usata dall'integrazione Neolink Local per stato delle camere e anteprime che non le svegliano. Predefinita 8559; 0 = disattivata.
+  api_bind:
+    name: Indirizzo API di stato
+    description: >-
+      Da dove si può raggiungere l'interfaccia di stato. Predefinito 127.0.0.1: solo questo Home Assistant (consigliato). Usa 0.0.0.0 solo se l'integrazione gira su un altro computer: le anteprime diventano visibili a tutta la rete.
+  certificate:
+    name: Certificato TLS
+    description: >-
+      Facoltativo. Percorso di un file PEM (certificato + chiave) per attivare
+      rtsps:// cifrato, per esempio /ssl/neolink.pem.
+  tls_client_auth:
+    name: Autenticazione client TLS
+    description: >-
+      Con TLS attivo: none = nessun certificato richiesto ai client,
+      request = richiesto se disponibile, require = obbligatorio.
+  rtsp_users:
+    name: Utenti RTSP
+    description: >-
+      Account (nome e password) richiesti per aprire gli stream RTSP.
+      Lascia vuoto per l'accesso senza password dalla tua rete.
+    fields:
+      name:
+        name: Nome utente
+      pass:
+        name: Password
+  mqtt:
+    name: MQTT
+    description: >-
+      Pubblica sensori e comandi delle camere (batteria, movimento, luci...)
+      tramite MQTT. Se i campi "override" sono vuoti usa il broker di Home
+      Assistant (add-on Mosquitto).
+    fields:
+      enabled:
+        name: Attiva MQTT
+        description: Se spento, l'add-on fornisce solo gli stream RTSP.
+      discovery:
+        name: MQTT Discovery
+        description: Crea automaticamente le entità delle camere in Home Assistant.
+      discovery_topic:
+        name: Topic di discovery
+        description: Prefisso usato da Home Assistant per la discovery (di solito "homeassistant").
+      broker_override:
+        name: Broker (manuale)
+        description: Indirizzo di un broker MQTT esterno. Vuoto = broker di Home Assistant.
+      port_override:
+        name: Porta broker (manuale)
+        description: Porta del broker esterno (di solito 1883).
+      username_override:
+        name: Utente broker (manuale)
+      password_override:
+        name: Password broker (manuale)
+  cameras:
+    name: Telecamere
+    description: >-
+      Una voce per ogni telecamera. Indica sempre o "uid" (telecamere a batteria
+      e P2P) oppure "address" (telecamere su rete con IP fisso), mai entrambi.
+    fields:
+      name:
+        name: Nome
+        description: >-
+          Nome della camera, usato anche nell'indirizzo dello stream
+          (rtsp://...:8558/<nome>/main). Evita spazi e accenti.
+      username:
+        name: Utente camera
+        description: Utente della camera (di solito "admin").
+      password:
+        name: Password camera
+        description: La password che usi nell'app Reolink per questa camera.
+      uid:
+        name: UID
+        description: >-
+          Codice univoco della camera (16 caratteri, sull'etichetta o nell'app
+          Reolink → Info dispositivo). Da usare per le camere a batteria.
+      address:
+        name: Indirizzo IP
+        description: In alternativa all'UID, IP e porta della camera, per esempio 192.168.1.50:9000.
+      channel_id:
+        name: Canale
+        description: Solo per NVR/hub con più camere (0 = primo canale). Per una camera singola lascia 0.
+      stream:
+        name: Stream pubblicati
+        description: >-
+          Quali flussi rendere disponibili. All = main (alta qualità), sub
+          (leggero) ed extern (bilanciato). Uno stream non usato non consuma nulla.
+      discovery:
+        name: Modo di ricerca della camera
+        description: >-
+          local = solo rete di casa, senza server Reolink (consigliato se la
+          camera è sulla tua rete: più veloce e privato). remote / map = aiuto
+          dei server Reolink per trovare la camera, dati sempre diretti.
+          relay = anche i dati passano dai server Reolink (fuori casa).
+          cellular = per camere 4G.
+      relay_server_region:
+        name: Regione server Reolink
+        description: Solo con discovery remote/map/relay. Scegli la regione più vicina (es. Europe (Germany)).
+      connect_mode:
+        name: Modo di connessione
+        description: >-
+          on_demand = la camera si collega solo mentre qualcuno la guarda e si
+          scollega subito dopo (indispensabile per le camere a batteria).
+          always = sempre collegata (solo per camere alimentate).
+      permitted_users:
+        name: Utenti autorizzati
+        description: Quali "Utenti RTSP" possono aprire questa camera. Vuoto = tutti.
+      mqtt_discovery_features:
+        name: Entità MQTT da creare
+        description: Quali entità creare in Home Assistant per questa camera (richiede MQTT Discovery).
+      enabled:
+        name: Attiva
+        description: Spegni per ignorare temporaneamente questa camera senza cancellarla.
+      idle_timeout_secs:
+        name: Disconnessione per inattività (secondi)
+        description: >-
+          Solo con connect_mode "always": dopo quanti secondi senza utilizzo
+          scollegare la camera. 0 = mai.
+      offline_timeout_secs:
+        name: Timeout camera offline (secondi)
+        description: Come l'opzione globale, ma solo per questa camera.
+      startup_keyframe_wait_secs:
+        name: Attesa primo fotogramma (secondi)
+        description: Come l'opzione globale, ma solo per questa camera. Consigliato 2.
+      relay_warm_seconds:
+        name: Collegamento extra dopo la chiusura (secondi)
+        description: >-
+          Con on_demand: per quanti secondi tenere la camera collegata dopo che
+          l'ultimo client ha chiuso. 0 = scollega subito (massimo risparmio di
+          batteria); un valore più alto rende più rapida una riapertura immediata.
+      udp_gap_skip_ms:
+        name: Attesa pacchetti persi (ms)
+        description: >-
+          Quanto aspettare un pacchetto video mancante prima di saltarlo
+          (predefinito 500). Abbassalo solo se vedi blocchi frequenti dell'immagine.
+      buffer_duration:
+        name: Buffer video (ms)
+        description: >-
+          Quanto video tenere in memoria per assorbire i rallentamenti della
+          rete (predefinito 3000). Valori più bassi riducono la memoria, valori
+          più alti tollerano reti instabili.
+      max_encryption:
+        name: Cifratura massima
+        description: >-
+          Cifratura più forte che neolink può negoziare con la camera:
+          aes (predefinito, consigliato), bcencrypt, none.
+      strict:
+        name: Modalità rigorosa
+        description: >-
+          Chiude lo stream se la camera invia dati inattesi invece di provare a
+          proseguire. Lascia spento.
+      update_time:
+        name: Sincronizza orologio
+        description: >-
+          Imposta l'ora della camera uguale a quella di Home Assistant a ogni
+          connessione. Utile se la data nella sovrimpressione è sbagliata.
+      max_discovery_retries:
+        name: Tentativi di ricerca
+        description: Quante volte cercare la camera prima di considerarla irraggiungibile (predefinito 10).
+      use_splash:
+        name: Immagine segnaposto
+        description: >-
+          Mostra un'immagine sostitutiva mentre la camera non è disponibile,
+          così il player non va in errore.
+      splash_pattern:
+        name: Tipo di segnaposto
+        description: "Aspetto dell'immagine segnaposto: snow (predefinito), smpte, black, white, red, green, blue."
+      debug:
+        name: Debug camera
+        description: Registra i messaggi di protocollo di questa camera. Solo per diagnosi.
+      enable_motion:
+        name: Sensore movimento (MQTT)
+        description: Pubblica il rilevamento movimento via MQTT.
+      enable_light:
+        name: Stato faretto (MQTT)
+        description: Pubblica quando il faretto della camera si accende o si spegne (camere che lo hanno).
+      enable_battery:
+        name: Batteria (MQTT)
+        description: >-
+          Pubblica il livello della batteria via MQTT. La lettura avviene solo
+          quando la camera è già collegata, quindi non la sveglia.
+      enable_preview:
+        name: Anteprima (MQTT)
+        description: Pubblica periodicamente un'immagine della camera via MQTT, solo mentre è già collegata.
+      enable_floodlight:
+        name: Programmi del faretto (MQTT)
+        description: Pubblica se le accensioni automatiche del faretto sono attive (camere che lo hanno).
+      enable_doorbell:
+        name: Campanello (MQTT)
+        description: Pubblica la pressione del pulsante (videocitofoni Reolink).
+      battery_update:
+        name: Intervallo batteria (ms)
+        description: Ogni quanto leggere la batteria mentre la camera è collegata (minimo 500).
+      preview_update:
+        name: Intervallo anteprima (ms)
+        description: Ogni quanto aggiornare l'anteprima mentre la camera è collegata (minimo 500).
+      floodlight_update:
+        name: Intervallo faretto (ms)
+        description: Ogni quanto leggere lo stato dei programmi del faretto (minimo 500).
+      pause_on_motion:
+        name: Video solo con movimento
+        description: >-
+          Invia il video solo mentre la camera rileva movimento (più i primi 5
+          secondi). Lascia spento per una visione normale.
+      pause_on_disconnect:
+        name: Pausa alla disconnessione
+        description: Mantenuta per compatibilità; in questa versione non ha effetto.
+      pause_motion_timeout:
+        name: Ritardo fine movimento (secondi)
+        description: Mantenuta per compatibilità; in questa versione non ha effetto.
+      pause_mode:
+        name: Immagine durante la pausa
+        description: Mantenuta per compatibilità; in questa versione non ha effetto.

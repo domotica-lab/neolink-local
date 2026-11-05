@@ -1,0 +1,217 @@
+configuration:
+  log_level:
+    name: Log level
+    description: >-
+      How detailed the add-on log is. "info" is recommended; use "debug" only
+      to diagnose a problem (it writes many lines per second).
+  bind:
+    name: Bind address
+    description: Network interface the RTSP server listens on. 0.0.0.0 = all interfaces (recommended).
+  bind_port:
+    name: RTSP port
+    description: >-
+      RTSP server port (default 8558). Do not use 8554: Home Assistant's
+      built-in go2rtc already uses it. Streams are at
+      rtsp://<home-assistant-ip>:8558/<camera-name>/main
+  offline_timeout_secs:
+    name: Offline timeout (seconds)
+    description: >-
+      Global default. How long a viewer keeps seeing the placeholder image while
+      a camera is unreachable before the stream is closed (so Home Assistant can
+      mark the camera unavailable). 0 = never; values 1-59 are raised to 60.
+      Can be overridden per camera.
+  startup_keyframe_wait_secs:
+    name: First-frame wait (seconds)
+    description: >-
+      Global default. When you open a sleeping camera, wait up to this long for
+      the first real frame before answering the player, instead of showing the
+      placeholder straight away. 2 works well with go2rtc; 0 = no wait.
+  stream_cache_path:
+    name: Stream cache file
+    description: >-
+      Where learned video/audio formats are saved, so after a restart a stream
+      is ready at once even if the camera is asleep. Keep the default
+      (/data/stream-cache.json); clear it to keep the cache in memory only.
+  api_port:
+    name: Status API port
+    description: >-
+      Port of the local API used by the Neolink Local integration for camera state and still images that never wake a camera. Default 8559; 0 = off.
+  api_bind:
+    name: Status API address
+    description: >-
+      Where the status API can be reached from. Default 127.0.0.1: only this Home Assistant (recommended). Use 0.0.0.0 only if the integration runs on another computer: still images become visible to the whole network.
+  certificate:
+    name: TLS certificate
+    description: Optional. Path to a PEM file (certificate + key) to enable encrypted rtsps://, e.g. /ssl/neolink.pem.
+  tls_client_auth:
+    name: TLS client authentication
+    description: "With TLS: none = no client certificate, request = asked for if available, require = mandatory."
+  rtsp_users:
+    name: RTSP users
+    description: Accounts (name and password) required to open the RTSP streams. Empty = no password on your network.
+    fields:
+      name:
+        name: Username
+      pass:
+        name: Password
+  mqtt:
+    name: MQTT
+    description: >-
+      Publish camera sensors and controls (battery, motion, lights...) over
+      MQTT. With the "override" fields empty, the Home Assistant broker
+      (Mosquitto add-on) is used.
+    fields:
+      enabled:
+        name: Enable MQTT
+        description: When off, the add-on only provides RTSP streams.
+      discovery:
+        name: MQTT Discovery
+        description: Create the camera entities in Home Assistant automatically.
+      discovery_topic:
+        name: Discovery topic
+        description: Prefix Home Assistant uses for discovery (usually "homeassistant").
+      broker_override:
+        name: Broker (manual)
+        description: Address of an external MQTT broker. Empty = Home Assistant broker.
+      port_override:
+        name: Broker port (manual)
+        description: Port of the external broker (usually 1883).
+      username_override:
+        name: Broker username (manual)
+      password_override:
+        name: Broker password (manual)
+  cameras:
+    name: Cameras
+    description: >-
+      One entry per camera. Always set either "uid" (battery and P2P cameras)
+      or "address" (cameras with a fixed IP), never both.
+    fields:
+      name:
+        name: Name
+        description: Camera name, also used in the stream address (rtsp://...:8558/<name>/main). Avoid spaces and accents.
+      username:
+        name: Camera username
+        description: The camera user (usually "admin").
+      password:
+        name: Camera password
+        description: The password you use in the Reolink app for this camera.
+      uid:
+        name: UID
+        description: The camera's 16-character unique code (on its label, or Reolink app → Device info). Use it for battery cameras.
+      address:
+        name: IP address
+        description: Instead of a UID, the camera's IP and port, e.g. 192.168.1.50:9000.
+      channel_id:
+        name: Channel
+        description: Only for NVRs/hubs with several cameras (0 = first channel). Leave 0 for a single camera.
+      stream:
+        name: Published streams
+        description: >-
+          Which streams to offer. All = main (high quality), sub (light) and
+          extern (balanced). An unused stream costs nothing.
+      discovery:
+        name: Camera discovery
+        description: >-
+          local = home network only, no Reolink servers (recommended when the
+          camera is on your network: faster and private). remote / map = Reolink
+          servers help find the camera, data stays direct. relay = data also goes
+          through Reolink servers (away from home). cellular = 4G cameras.
+      relay_server_region:
+        name: Reolink server region
+        description: Only with remote/map/relay discovery. Pick the nearest region.
+      connect_mode:
+        name: Connection mode
+        description: >-
+          on_demand = the camera connects only while someone watches and
+          disconnects right after (essential for battery cameras).
+          always = always connected (mains-powered cameras only).
+      permitted_users:
+        name: Allowed users
+        description: Which "RTSP users" may open this camera. Empty = everyone.
+      mqtt_discovery_features:
+        name: MQTT entities to create
+        description: Which entities to create in Home Assistant for this camera (needs MQTT Discovery).
+      enabled:
+        name: Enabled
+        description: Turn off to ignore this camera for now without deleting it.
+      idle_timeout_secs:
+        name: Idle disconnect (seconds)
+        description: Only with connect_mode "always". Disconnect after this many seconds without use. 0 = never.
+      offline_timeout_secs:
+        name: Offline timeout (seconds)
+        description: Same as the global option, for this camera only.
+      startup_keyframe_wait_secs:
+        name: First-frame wait (seconds)
+        description: Same as the global option, for this camera only. 2 is recommended.
+      relay_warm_seconds:
+        name: Linger after close (seconds)
+        description: >-
+          With on_demand. How long to keep the camera connected after the last
+          viewer leaves. 0 = disconnect at once (best battery life); a higher
+          value makes an immediate reopen faster.
+      udp_gap_skip_ms:
+        name: Lost-packet wait (ms)
+        description: How long to wait for a missing video packet before skipping it (default 500). Lower it only if the picture freezes often.
+      buffer_duration:
+        name: Video buffer (ms)
+        description: How much video to keep in memory to absorb network hiccups (default 3000).
+      max_encryption:
+        name: Maximum encryption
+        description: "Strongest encryption Neolink may negotiate with the camera: aes (default, recommended), bcencrypt, none."
+      strict:
+        name: Strict mode
+        description: Close the stream if the camera sends unexpected data instead of trying to carry on. Leave off.
+      update_time:
+        name: Sync clock
+        description: Set the camera's clock to Home Assistant's time on every connection. Useful if the on-screen date is wrong.
+      max_discovery_retries:
+        name: Discovery attempts
+        description: How many times to look for the camera before treating it as unreachable (default 10).
+      use_splash:
+        name: Placeholder image
+        description: Show a placeholder picture while the camera is unavailable, so the player does not fail.
+      splash_pattern:
+        name: Placeholder style
+        description: "Look of the placeholder: snow (default), smpte, black, white, red, green, blue."
+      debug:
+        name: Camera debug
+        description: Log this camera's protocol messages. For diagnosis only.
+      enable_motion:
+        name: Motion sensor (MQTT)
+        description: Publish motion detection over MQTT.
+      enable_light:
+        name: Floodlight state (MQTT)
+        description: Publish when the camera's floodlight turns on or off (cameras that have one).
+      enable_battery:
+        name: Battery (MQTT)
+        description: Publish the battery level over MQTT. It is read only while the camera is already connected, so it never wakes it.
+      enable_preview:
+        name: Preview (MQTT)
+        description: Publish a camera snapshot over MQTT periodically, only while it is already connected.
+      enable_floodlight:
+        name: Floodlight schedules (MQTT)
+        description: Publish whether the floodlight's automatic schedules are active (cameras that have one).
+      enable_doorbell:
+        name: Doorbell (MQTT)
+        description: Publish button presses (Reolink video doorbells).
+      battery_update:
+        name: Battery interval (ms)
+        description: How often to read the battery while the camera is connected (minimum 500).
+      preview_update:
+        name: Preview interval (ms)
+        description: How often to refresh the preview while the camera is connected (minimum 500).
+      floodlight_update:
+        name: Floodlight interval (ms)
+        description: How often to read the floodlight schedule state (minimum 500).
+      pause_on_motion:
+        name: Video only on motion
+        description: Send video only while the camera detects motion (plus the first 5 seconds). Leave off for normal viewing.
+      pause_on_disconnect:
+        name: Pause on disconnect
+        description: Kept for compatibility; has no effect in this version.
+      pause_motion_timeout:
+        name: Motion end delay (seconds)
+        description: Kept for compatibility; has no effect in this version.
+      pause_mode:
+        name: Image while paused
+        description: Kept for compatibility; has no effect in this version.

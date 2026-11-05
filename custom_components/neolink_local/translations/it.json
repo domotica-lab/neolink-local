@@ -1,0 +1,65 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Neolink Local",
+        "description": "Collega l'add-on Neolink Local. Se l'add-on gira su questo Home Assistant, lascia i valori proposti.",
+        "data": {
+          "host": "Indirizzo dell'add-on",
+          "api_port": "Porta dell'API di stato",
+          "rtsp_host": "Indirizzo RTSP (facoltativo)",
+          "username": "Utente RTSP (facoltativo)",
+          "password": "Password RTSP (facoltativa)"
+        },
+        "data_description": {
+          "host": "127.0.0.1 se l'add-on gira su questo Home Assistant.",
+          "api_port": "L'opzione api_port dell'add-on (predefinita 8559).",
+          "rtsp_host": "Lascia vuoto per usare l'indirizzo dell'add-on.",
+          "username": "Solo se nell'add-on hai impostato degli utenti RTSP.",
+          "password": "Password di quell'utente RTSP."
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Impossibile raggiungere l'add-on. Controlla che Neolink Local sia avviato e che la porta sia giusta."
+    },
+    "abort": {
+      "already_configured": "Questo add-on è già configurato."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Stream video",
+        "description": "Quale stream riproducono le entità camera. Lo stream sub è più leggero ed è adatto alle dashboard.",
+        "data": {
+          "stream": "Stream"
+        }
+      }
+    }
+  },
+  "selector": {
+    "stream": {
+      "options": {
+        "main": "Main (alta qualità)",
+        "sub": "Sub (leggero)",
+        "extern": "Extern (bilanciato)"
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "connected": {
+        "name": "Collegata"
+      }
+    },
+    "sensor": {
+      "viewers": {
+        "name": "Spettatori"
+      },
+      "last_image": {
+        "name": "Ultima immagine"
+      }
+    }
+  }
+}

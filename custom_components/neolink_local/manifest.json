@@ -1,0 +1,15 @@
+{
+  "domain": "neolink_local",
+  "name": "Neolink Local",
+  "codeowners": [
+    "@domotica-lab"
+  ],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://github.com/domotica-lab/neolink-local",
+  "integration_type": "hub",
+  "iot_class": "local_polling",
+  "requirements": [],
+  "version": "1.0.4",
+  "issue_tracker": "https://github.com/domotica-lab/neolink-local/issues"
+}
