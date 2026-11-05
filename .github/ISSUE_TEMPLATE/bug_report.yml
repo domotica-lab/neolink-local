@@ -1,0 +1,37 @@
+name: Segnalazione problema / Bug report
+description: Qualcosa non funziona / Something does not work
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Non incollare password o UID delle camere. / Do not paste passwords or camera UIDs.
+  - type: input
+    id: version
+    attributes:
+      label: Versione add-on e integrazione / Add-on and integration version
+      placeholder: "1.0.4 / 1.0.4"
+    validations:
+      required: true
+  - type: input
+    id: camera
+    attributes:
+      label: Modello camera / Camera model
+      placeholder: "Argus 2, alimentazione a batteria + pannello"
+  - type: textarea
+    id: what
+    attributes:
+      label: Cosa succede / What happens
+    validations:
+      required: true
+  - type: textarea
+    id: log
+    attributes:
+      label: Registro dell'add-on / Add-on log
+      description: Dall'apertura alla chiusura della camera. / From opening to closing the camera.
+      render: text
+  - type: textarea
+    id: config
+    attributes:
+      label: Configurazione (senza password) / Configuration (no passwords)
+      render: yaml
