@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.5
+
+- **Meno immagini rovinate (macchie grigie/viola) su Wi-Fi debole:** un pacchetto
+  video perso veniva a volte saltato subito, senza aspettare che la camera lo
+  rispedisse. Ora ogni pacchetto perso ha tutto il tempo di `udp_gap_skip_ms`.
+- **Meno disconnessioni** con `Connection Lost: ... Magic invalid` quando si perde
+  un pacchetto durante un fotogramma chiave.
+- Documentazione: il valore consigliato di `udp_gap_skip_ms` è ora `500` (non
+  più `150`, che causava le macchie). Se lo avevi impostato a 150, alzalo a 500.
+
 ## 1.0.4
 
 - **Disponibile su GitHub**: si installa aggiungendo il repository
