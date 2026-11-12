@@ -57,7 +57,7 @@ cameras:
     connect_mode: on_demand
     relay_warm_seconds: 0
     startup_keyframe_wait_secs: 2
-    udp_gap_skip_ms: 150
+    udp_gap_skip_ms: 500
     stream: All
 ```
 
@@ -73,7 +73,7 @@ Ogni opzione ha una descrizione nella scheda **Configurazione** (attiva
 | `relay_warm_seconds` | `0` | — | Scollega subito dopo la chiusura. |
 | `discovery` | `local` | `local` | Trova la camera sulla rete di casa: più veloce e privato. |
 | `startup_keyframe_wait_secs` | `2` | `2` | Mostra subito il video vero, senza schermo nero iniziale. |
-| `udp_gap_skip_ms` | `150` | `150` | Su Wi-Fi riduce gli scatti dovuti ai pacchetti persi (predefinito 500). |
+| `udp_gap_skip_ms` | `500` | `500` | Quanto aspettare un pacchetto perso prima di saltarlo. Valori bassi (es. 150) danno immagini rovinate (macchie grigie/viola) fino al fotogramma chiave successivo; su Wi-Fi debole prova `1000`. |
 
 ## Integrazione Neolink Local (consigliata)
 
@@ -153,7 +153,8 @@ L'ultima riga conferma che la camera è stata scollegata. Lo stream resta attivo
 | `Login credentials were not accepted` | Password sbagliata: è quella dell'app Reolink per quella camera. |
 | `Trying local discovery` ripetuto | La camera è su un'altra rete o VLAN: prova `discovery: remote`. |
 | Il video impiega 5–10 secondi ad apparire | Normale per una camera addormentata: è il tempo di risveglio. |
-| Il video va a scatti | Pacchetti persi sul Wi-Fi (righe `UDP payload gap`): imposta `udp_gap_skip_ms: 150` e migliora il segnale della camera. |
+| Il video va a scatti | Pacchetti persi sul Wi-Fi (righe `UDP payload gap`): migliora il segnale della camera (ripetitore/access point più vicino). |
+| Immagine con macchie grigie/viola o colori "spalmati" | Pacchetti persi e saltati prima che la camera li rispedisse (righe `UDP payload gap ... skipping`): alza `udp_gap_skip_ms` a `500`–`1000` e migliora il segnale Wi-Fi. |
 | La batteria cala anche senza guardare | Cerca nel registro `Factory received new client` mentre nessuno guarda: di solito è una scheda della dashboard in modalità live. |
 
 ## Crediti e licenza
