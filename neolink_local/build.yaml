@@ -1,3 +1,3 @@
 build_from:
-  amd64: ghcr.io/domotica-lab/neolink-local:1.0.5
-  aarch64: ghcr.io/domotica-lab/neolink-local:1.0.5
+  amd64: ghcr.io/domotica-lab/neolink-local:1.0.6
+  aarch64: ghcr.io/domotica-lab/neolink-local:1.0.6

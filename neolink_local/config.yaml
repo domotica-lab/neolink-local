@@ -1,6 +1,6 @@
 name: Neolink Local
 slug: neolink_local
-version: "1.0.5"
+version: "1.0.6"
 description: Telecamere Reolink (anche a batteria e P2P) in Home Assistant come stream RTSP locali, senza cloud.
 url: https://github.com/domotica-lab/neolink-local
 arch:

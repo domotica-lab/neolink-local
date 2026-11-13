@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.6
+
+- **Niente più video bloccato (e log pieno di errori `header.msg_id: 3`) se si
+  perde il primo pacchetto di un flusso:** prima tutti i fotogrammi successivi
+  venivano letti come testo e scartati finché la camera non si riconnetteva. Ora
+  il flusso viene riconosciuto come video e l'immagine riparte al fotogramma
+  chiave successivo.
+
 ## 1.0.5
 
 - **Meno immagini rovinate (macchie grigie/viola) su Wi-Fi debole:** un pacchetto
