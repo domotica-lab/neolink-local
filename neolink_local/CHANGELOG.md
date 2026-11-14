@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.12
+
+- **Niente più disconnessioni per un singolo pacchetto illeggibile:** durante
+  lo streaming, un solo pacchetto UDP rovinato o di tipo sconosciuto chiudeva la
+  connessione con la camera (nel log `Connection Lost: BcUDP reciver dropped:
+  NoneRecieved`), seguito da 3-7 secondi di riconnessione. Succedeva soprattutto
+  con Wi-Fi debole. Ora il pacchetto viene scartato e il video continua; una
+  volta al minuto il log indica quanti ne sono stati ignorati.
+- Se la connessione si chiude davvero, il log ora ne scrive la causa reale
+  (`UDP socket to … closed: …`).
+
 ## 1.0.11
 
 - **Ricezione video più fluida:** i pacchetti ricevuti passavano al decoder
