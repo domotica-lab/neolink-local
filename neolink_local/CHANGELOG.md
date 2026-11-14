@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.9
+
+- **Meno immagini rovinate su Wi-Fi debole:** le camere Reolink rispediscono un
+  pacchetto perso con un loro ritardo, e spesso arrivava subito dopo i 500 ms di
+  `udp_gap_skip_ms`, quando neolink l'aveva già saltato. Ora neolink se ne
+  accorge e aspetta il tempo giusto per ogni camera (al massimo 2 secondi), poi
+  torna a 500 ms quando non serve più. Una volta al minuto il log mostra una riga
+  `UDP loss from …` con i pacchetti saltati e quelli arrivati in ritardo.
+
 ## 1.0.8
 
 - **Il TCP automatico ora funziona anche con le camere in modalità `always`:**
