@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.8
+
+- **Il TCP automatico ora funziona anche con le camere in modalità `always`:**
+  nella 1.0.7 neolink non conosceva ancora l'indirizzo delle camere quando
+  queste si collegavano all'avvio, quindi restavano in UDP. Ora gli indirizzi
+  salvati vengono caricati prima, e il TCP viene provato anche sull'indirizzo
+  appena trovato (prima installazione o camera che ha cambiato IP).
+
 ## 1.0.7
 
 - **Le camere alimentate usano il TCP da sole, come l'app Reolink:** con il solo
