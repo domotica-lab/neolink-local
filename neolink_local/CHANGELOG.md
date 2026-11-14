@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.11
+
+- **Ricezione video più fluida:** i pacchetti ricevuti passavano al decoder
+  attraverso una coda troppo piccola (100 pacchetti, meno di un fotogramma
+  chiave). Quando si riempiva, neolink smetteva per un attimo di confermare i
+  pacchetti alla camera, che lo interpretava come una connessione debole e
+  rallentava o rispediva. Ora la coda è di 2048 pacchetti.
+- Le conferme (ACK) alla camera stanno sempre in un solo pacchetto di rete.
+- La riga `UDP loss from …` del log ora indica anche se la consegna al decoder
+  si è bloccata (`delivery to decoder blocked`).
+
 ## 1.0.10
 
 - **Collegamento più rapido delle camere a batteria:** neolink non prova più il
