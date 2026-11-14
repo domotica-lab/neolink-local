@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.7
+
+- **Le camere alimentate usano il TCP da sole, come l'app Reolink:** con il solo
+  `uid` neolink usava sempre l'UDP, dove ogni pacchetto perso sulla Wi-Fi diventa
+  un'immagine rovinata (`UDP payload gap` nel log). Ora prova prima il TCP
+  sull'ultimo indirizzo noto della camera, che rispedisce da solo i pacchetti
+  persi. Neolink controlla che a quell'indirizzo ci sia proprio la camera giusta;
+  le camere a batteria continuano a usare l'UDP. Non serve cambiare la
+  configurazione: nel log compare `MEDIA PATH: TCP over LAN`.
+
 ## 1.0.6
 
 - **Niente più video bloccato (e log pieno di errori `header.msg_id: 3`) se si
