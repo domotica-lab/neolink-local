@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.13
+
+- **Video di nuovo fluido:** dalla 1.0.9 neolink aspettava fino a 1,2 secondi a
+  ogni pacchetto perso prima di andare avanti, e con una Wi-Fi che perde molti
+  pacchetti il video restava quasi sempre fermo e si apriva più lentamente. Ora
+  si torna ad aspettare al massimo 500 ms, come prima: al peggio l'immagine si
+  sporca un attimo, ma il video scorre. Restano tutte le altre correzioni.
+
 ## 1.0.12
 
 - **Niente più disconnessioni per un singolo pacchetto illeggibile:** durante
