@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.10
+
+- **Collegamento più rapido delle camere a batteria:** neolink non prova più il
+  TCP sulle camere a batteria (non ce l'hanno), che prima potevano perdere fino
+  a 1,5 secondi a ogni collegamento. Le riconosce dal livello di batteria che
+  riportano.
+- **Meno blocchi dell'immagine:** l'attesa per un pacchetto perso ora arriva al
+  massimo a 1,2 secondi (prima 2). I log hanno mostrato che la camera rispedisce
+  il pacchetto dopo circa 0,8 secondi; aspettare di più bloccava l'immagine
+  senza recuperare quasi niente.
+
 ## 1.0.9
 
 - **Meno immagini rovinate su Wi-Fi debole:** le camere Reolink rispediscono un
