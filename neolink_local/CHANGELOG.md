@@ -1,5 +1,33 @@
 # Changelog
 
+## 1.0.14
+
+Revisione dell'affidabilità: una camera che va in errore ora si riprende da
+sola, senza dover riavviare l'add-on.
+
+- **Le camere si riprendono da sole:** se un processo interno di una camera si
+  fermava, la camera sembrava attiva ma non si ricollegava più fino al riavvio.
+  Ora viene ricreata automaticamente (al massimo una volta al minuto, così una
+  password sbagliata non viene riprovata a ogni aggiornamento di Home Assistant
+  e l'account della camera non si blocca).
+- **Gli indirizzi RTSP tornano da soli:** dopo un errore dello stream ripartono
+  con un'attesa crescente (da 1 a 60 secondi). Mentre la camera viene ricreata
+  restano attivi con l'immagine di attesa, mai un "non trovato" (che fa
+  smettere alcuni NVR come Blue Iris).
+- **Connessione persa rilevata prima:** se la camera chiude la connessione
+  neolink si ricollega subito invece di aspettare circa 50 secondi. In TCP il
+  tentativo di connessione si arrende dopo 10 secondi (prima circa 2 minuti) e
+  una camera che perde la corrente viene notata in pochi secondi.
+- **Modifiche al config via MQTT ricollegano solo le camere cambiate**, non più
+  tutte.
+- Il conteggio di chi sta usando una camera non può più sbagliare (in rari casi
+  la teneva collegata per sempre o la scollegava mentre qualcuno guardava).
+- Il rilevamento del movimento non ripete la richiesta ogni secondo se la
+  camera la rifiuta.
+- Niente più crash in chiusura (`RefCell already borrowed`).
+- **Due camere con lo stesso nome ora sono un errore** con un messaggio chiaro
+  all'avvio (prima la seconda veniva ignorata in silenzio).
+
 ## 1.0.13
 
 - **Video di nuovo fluido:** dalla 1.0.9 neolink aspettava fino a 1,2 secondi a

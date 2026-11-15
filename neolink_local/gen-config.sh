@@ -71,6 +71,10 @@ for ((i=0; i<n_cams; i++)); do
   cj() { jq -r "$1" <<<"$cam"; }          # raw from camera
   cname="$(cj '.name // empty')"
   { [ -z "$cname" ] || [ "$cname" = "null" ]; } && { echo "Camera entry is missing a name" >&2; exit 1; }
+  # neolink addresses cameras by name and refuses duplicates; say so here.
+  if [ "$(jq --arg n "$cname" '[(.cameras // [])[] | select(.name == $n)] | length' <<<"$OPTS")" -gt 1 ]; then
+    echo "Camera name '$cname' is used more than once" >&2; exit 1
+  fi
   uname="$(cj '.username // empty')"
   { [ -z "$uname" ] || [ "$uname" = "null" ]; } && { echo "Camera '$cname': missing a username" >&2; exit 1; }
   uid="$(cj '.uid // empty')"
